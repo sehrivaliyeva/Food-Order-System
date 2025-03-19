@@ -1,16 +1,18 @@
 package project.foodordersystem.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class MenuRequestDto {
-    @NotEmpty(message = " this section must not be a null")
-    @NotNull
+
+    @NotBlank(message = "menuName must not be null or blank")
     private String menuName;
-    @NotEmpty(message = "this section must not be a null")
+
+
+    @NotBlank(message = "menuDescription must not be null or blank")
     private String menuDescription;
 }

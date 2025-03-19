@@ -1,3 +1,10 @@
 1. Ilk once menu yaratmaga bashlayiriq
 validasiya qosmaliyiq ki ad ve description cox uzun yazilmasin
 eger eyni adli menu varsa yeniden elave etmek mumkun olmasin
+
+2.Menunu updata edirik
+eger gonderdiyimiz id ile menu yoxdursa exc atir
+yeni ad elave ederken(updatede) eger bazada varsa  o ad yeniden exc atir
+
+3.adina gore menu getirende birbasa Menu classi gelir
+list yox cunki biz onsuzda 1 adda yalniz 1 menu qeyd ede bilirik bazaya
