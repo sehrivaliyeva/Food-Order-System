@@ -1,3 +1,15 @@
+UMUMI OLARAQ YARANMA ARDICILLIGI BELE OLUR (qurdugumuz jpa elaqelerine uygun olaraq)
+QEYD: isteye uygun olaraq bu deyise de biler
+1. menu
+2.category
+3.food
+4.order
+
+BUTUN REQUEST CLASSLARINDA VALIDATION ISTIFADE OLUNUB
+VE BUTUN EXCEPTIONLAR GLOBAL EXCEPTIONHANDLER ILE YAZILIB
+
+----------MENU------------
+
 1. Ilk once menu yaratmaga bashlayiriq
 validasiya qosmaliyiq ki ad ve description cox uzun yazilmasin
 eger eyni adli menu varsa yeniden elave etmek mumkun olmasin
@@ -8,3 +20,46 @@ yeni ad elave ederken(updatede) eger bazada varsa  o ad yeniden exc atir
 
 3.adina gore menu getirende birbasa Menu classi gelir
 list yox cunki biz onsuzda 1 adda yalniz 1 menu qeyd ede bilirik bazaya
+
+
+--------------CATEGORY-------------
+
+ 1.her bir kateqoriyani elave ederken menu adini da daxil ediirk hanasi menuda olacagini
+ bildirmek ucun ve eyni adli kategoriyadan 2ci defe elave etmek mumkun olmur
+ eyni zamanda validasiya da tetbiq etmisik
+
+
+ 2.categoriyani update ederken menu tapilmamasi hallarini eyni kategoriyadan artiq bazada mvcud
+ olma hallarini ve s hamisini nezere aliriq
+
+
+ 3. categoryName gore category getirende birbasa olaraq entity clasini getirik ki
+ daxilindedki butun foodlari ve s gore bilek
+
+ 4.eger umumi olaraq categorylerin siyahisini gormek siteyriikse bu zaman dto classi(
+ categoryresponsedto) olaraq getiririk
+
+
+ ------------------FOOD------------------
+
+ 1.category ile oxsar  sekildedir
+
+
+ ---------------ORDER-----------
+ 1.Burada FOOD ile manytomany elaqesi qururuq
+
+ 2.create Order ucun bele bir mentiq var ki daxil edilen
+ food adlari bazada movcud olmalidir eger movcud deyilde notfound exception atir ,
+  payment card ile olarsa eger card nomresi teleb edilir ve hemin field doldurulur(cardnumber)
+  eger 16dan azdrisa uzunlugu qebul edilmesin.order status ilk olaraq pending
+  olur sifaris ilk verildiyi anda. modelmapper istifade ederek mappleme emeliyyati aparilir
+   requestclassinda validasiya tetbiq olunub,reponseclassinda da eger card ile odenmirse
+   cardNumberfiledi gorunmur eger cardile sifaris olunub dolduurlarsa o zaman cardNumber fieldi gorunur
+
+
+3.orderin statusunu deyismek ucun put mapping ile metod yazilib onu yalniz
+sifaris qebul olundugdan sonra retoran iscileri deyise biler
+ mesele ilk anca PENDING  our sonra CONFIRMED sonra PREPARED
+
+4. en son getall metodu ile butun sifarisleri gore bilerik
+
