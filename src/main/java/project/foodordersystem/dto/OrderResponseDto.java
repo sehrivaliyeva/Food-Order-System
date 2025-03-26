@@ -17,5 +17,6 @@ public class OrderResponseDto {
     private String cardNumber;
 
     private OrderStatus status;
+
     private List<String> foodNames;
 }

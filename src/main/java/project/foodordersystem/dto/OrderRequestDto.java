@@ -1,6 +1,7 @@
 package project.foodordersystem.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import project.foodordersystem.enums.OrderStatus;
@@ -17,14 +18,13 @@ public class OrderRequestDto {
     @NotBlank(message = "Restaurant not be empty or null")
     private String restaurantName;
 
-    @NotBlank(message = "Payment not be empty or null")
+
+    @NotNull(message = "Payment type cannot be null")
     private Payment payment;
 
-    @Size(min = 16, message = "Card number consist  16 character")
-    @NotBlank(message = "CardNumber not be empty or null")
     private String cardNumber;
 
-    @NotBlank(message = "Foods not be empty or null")
+    @Size(min = 1)
     private List<String> foodNames;
 
 }

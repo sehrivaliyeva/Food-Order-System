@@ -26,24 +26,55 @@ public class OrderService {
 
     @Transactional
     public OrderResponseDto createOrder(OrderRequestDto orderRequest) {
-
+        // Ödəniş kartla olarsa, kart nömrəsini yoxla
         if (orderRequest.getPayment() == Payment.CARD) {
-            if (orderRequest.getCardNumber() == null || orderRequest.getCardNumber().length() < 16) {
-                throw new IllegalArgumentException("Card Number consist of 16 characters");
+            if (orderRequest.getCardNumber() == null || orderRequest.getCardNumber().length() != 16) {
+                throw new IllegalArgumentException("Card Number must consist of exactly 16 characters");
             }
+        } else {
+            orderRequest.setCardNumber(null); // CASH ödənişində kart məlumatı saxlanmamalıdır
         }
 
+        // Yemək adlarını yoxla
+        if (orderRequest.getFoodNames() == null || orderRequest.getFoodNames().isEmpty()) {
+            throw new IllegalArgumentException("Food list cannot be empty");
+        }
+
+        // Yeməkləri DB-dən götür və `Food` obyektlərinə çevir
         List<Food> foods = orderRequest.getFoodNames().stream()
                 .map(name -> foodRepository.findByFoodName(name)
                         .orElseThrow(() -> new NotFoundException("Food not found: " + name)))
                 .collect(Collectors.toList());
-        Order order = modelMapper.map(orderRequest, Order.class);
+
+        // DTO-dan Entity yarat
+        Order order = new Order();
+        order.setAddress(orderRequest.getAddress());
+        order.setRestaurantName(orderRequest.getRestaurantName());
+        order.setPayment(orderRequest.getPayment());
+        order.setCardNumber(orderRequest.getCardNumber());
         order.setFoods(foods);
         order.setStatus(OrderStatus.PENDING);
 
+        // Məlumat bazasına əlavə et
         Order savedOrder = orderRepository.save(order);
-        return modelMapper.map(savedOrder, OrderResponseDto.class);
+
+        // **Cavab DTO yarat və məlumatları set et**
+        OrderResponseDto responseDto = new OrderResponseDto();
+        responseDto.setAddress(savedOrder.getAddress());
+        responseDto.setRestaurantName(savedOrder.getRestaurantName());
+        responseDto.setPayment(savedOrder.getPayment());
+        responseDto.setCardNumber(savedOrder.getCardNumber());
+        responseDto.setStatus(savedOrder.getStatus());
+
+        // **`foodNames` siyahısını əl ilə set et**
+        List<String> foodNames = savedOrder.getFoods().stream()
+                .map(Food::getFoodName)
+                .collect(Collectors.toList());
+        responseDto.setFoodNames(foodNames);
+
+        return responseDto;
     }
+
 
     @Transactional
     public Order updateOrderStatus(Long orderId, OrderStatus status) {

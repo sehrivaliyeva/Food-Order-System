@@ -1,5 +1,6 @@
 package project.foodordersystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,9 +25,11 @@ public class Food {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     @ManyToMany(mappedBy = "foods")
+    @JsonIgnore
     private List<Order> orders;
 
 }
