@@ -26,9 +26,12 @@ public class Order {
     private Long id;
     private String address;
     private String restaurantName;
+
     @Enumerated(EnumType.STRING)
     private Payment payment;
+
     private String cardNumber;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 

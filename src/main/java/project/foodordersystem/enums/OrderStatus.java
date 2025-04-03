@@ -8,5 +8,4 @@ public enum OrderStatus {
     OUT_FOR_DELIVERY, // Kuryer sifarişi çatdırır
     DELIVERED,   // Sifariş müştəriyə çatdırıldı
     CANCELLED
-
 }

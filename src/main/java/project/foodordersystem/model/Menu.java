@@ -21,6 +21,7 @@ public class Menu {
     @Column(nullable = false, unique = true)
     private String menuName;
     private String menuDescription;
+
     @OneToMany(mappedBy = "menu")
     private List<Category> categories;
 }

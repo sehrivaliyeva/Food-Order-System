@@ -26,7 +26,7 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-@JsonIgnore
+    @JsonIgnore
     private List<Food> foods;
 
     @ManyToOne

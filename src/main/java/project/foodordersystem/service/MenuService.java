@@ -49,13 +49,13 @@ public class MenuService {
         menuRepository.delete(existingMenu);
     }
 
-    public MenuResponseDto getMenuById(Long id) {
+   /* public MenuResponseDto getMenuById(Long id) {
         Menu menu = menuRepository.findById(id).orElse(null);
         if (menu == null) {
             throw new NotFoundException("Menu not found with id " + id);
         }
         return modelMapper.map(menu, MenuResponseDto.class);
-    }
+    }*/
 
     public Optional<Menu> getMenusByName(String menuName) {
         Optional<Menu> menu = menuRepository.findByMenuName(menuName);

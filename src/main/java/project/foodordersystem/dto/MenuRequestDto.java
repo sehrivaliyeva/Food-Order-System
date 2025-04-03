@@ -12,7 +12,6 @@ public class MenuRequestDto {
     @NotBlank(message = "menuName must not be null or blank")
     private String menuName;
 
-
     @NotBlank(message = "menuDescription must not be null or blank")
     private String menuDescription;
 }
