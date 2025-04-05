@@ -1,5 +1,6 @@
 package project.foodordersystem.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,12 +17,15 @@ import project.foodordersystem.model.Order;
 import project.foodordersystem.repository.FoodRepository;
 import project.foodordersystem.repository.OrderRepository;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,6 +42,8 @@ class OrderServiceTest {
 
     @InjectMocks
     private OrderService orderService;
+
+    private Order order;
 
     @Test
     void testCreateOrder_withCardPayment_success() {
@@ -74,7 +80,6 @@ class OrderServiceTest {
         verify(orderRepository).save(Mockito.<Order>any());
 
 
-
         OrderResponseDto response = orderService.createOrder(requestDto);
 
         assertEquals("Baku", response.getAddress());
@@ -86,7 +91,7 @@ class OrderServiceTest {
 
         verify(foodRepository, times(1)).findByFoodName("Pizza");
         verify(foodRepository, times(1)).findByFoodName("Burger");
-       // verify(orderRepository, times(1)).save(any(Order.class));
+        // verify(orderRepository, times(1)).save(any(Order.class));
         verify(orderRepository, times(1)).save(Mockito.<Order>any());
 
 
@@ -134,5 +139,78 @@ class OrderServiceTest {
         );
 
         assertEquals("Food not found: UnknownFood", exception.getMessage());
+    }
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize a sample Order object
+        order = new Order();
+        order.setId(1L);
+        order.setStatus(OrderStatus.PENDING);
+    }
+
+    @Test
+    public void testUpdateOrderStatus_Success() {
+        // Given
+        Long orderId = 1L;
+        OrderStatus newStatus = OrderStatus.CONFIRMED;
+
+        // When
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+        when(orderRepository.save(order)).thenReturn(order);
+
+        Order updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
+
+        // Then
+        assertEquals(newStatus, updatedOrder.getStatus());
+        verify(orderRepository, times(1)).findById(orderId);
+        verify(orderRepository, times(1)).save(order);
+    }
+
+    @Test
+    public void testUpdateOrderStatus_NotFound() {
+        // Given
+        Long orderId = 1L;
+        OrderStatus newStatus = OrderStatus.CONFIRMED;
+
+        // When
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(NotFoundException.class, () -> orderService.updateOrderStatus(orderId, newStatus));
+        verify(orderRepository, times(1)).findById(orderId);
+        verify(orderRepository, never()).save(Mockito.<Order>any());
+    }
+
+
+
+    @Test
+    public void testGetAllOrders() {
+
+        Order order1 = new Order();
+        order1.setId(1L);
+        order1.setStatus(OrderStatus.PENDING);
+        order1.setAddress("Address 1");
+        order1.setRestaurantName("Restaurant 1");
+
+        Order order2 = new Order();
+        order2.setId(2L);
+        order2.setStatus(OrderStatus.CONFIRMED);
+        order2.setAddress("Address 2");
+        order2.setRestaurantName("Restaurant 2");
+        // Given
+        List<Order> orders = Arrays.asList(order1, order2);
+
+        // When
+        when(orderRepository.findAll()).thenReturn(orders);
+
+        // Then
+        List<Order> allOrders = orderService.getAllOrders();
+        assertNotNull(allOrders);
+        assertEquals(2, allOrders.size());
+        assertEquals(order1.getId(), allOrders.get(0).getId());
+        assertEquals(order2.getId(), allOrders.get(1).getId());
+
+        verify(orderRepository, times(1)).findAll();
     }
 }

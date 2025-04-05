@@ -26,13 +26,12 @@ public class OrderService {
 
     @Transactional
     public OrderResponseDto createOrder(OrderRequestDto orderRequest) {
-        // Ödəniş kartla olarsa, kart nömrəsini yoxla
         if (orderRequest.getPayment() == Payment.CARD) {
             if (orderRequest.getCardNumber() == null || orderRequest.getCardNumber().length() != 16) {
                 throw new IllegalArgumentException("Card Number must consist of exactly 16 characters");
             }
         } else {
-            orderRequest.setCardNumber(null); // CASH ödənişində kart məlumatı saxlanmamalıdır
+            orderRequest.setCardNumber(null);
         }
 
         // Yemək adlarını yoxla
