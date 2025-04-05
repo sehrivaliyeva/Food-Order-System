@@ -12,7 +12,7 @@ FoodOrderSystem is a modern, **Java-powered** restaurant management system desig
 ✅ **Effortless Deployment**: Fully containerized with **Docker & Docker Compose**.  
 ✅ **Swagger API Documentation**: Easily test and explore the available endpoints.  
 
-## 🛠️ Technologies Used
+## 🛠️ Technologies Used 
 - **Java 17** 🌱
 - **Spring Boot** (Spring Web, Spring Data JPA, Spring Security) 🌐
 - **PostgreSQL** 🗄️
